@@ -1,3 +1,5 @@
+このプロジェクトは、VS Code の Codex（Codex CLI）で全て作成・構成・編集しました。
+
 NFT Mint App (Polygon)
 
 概要
