@@ -38,8 +38,8 @@ export async function POST(req: Request) {
 
     if (!isAddress(address)) return NextResponse.json({ error: 'invalid address' }, { status: 400 })
 
-    // Load current password
-    const envPassword = process.env.MINT_PASSWORD || ''
+    // Load current password (default demo if unset)
+    const envPassword = process.env.MINT_PASSWORD || 'demo'
     const cfg = readJson(configPath, { password: envPassword }) as { password: string }
     const currentPassword = (cfg?.password || '').trim()
     if (!currentPassword || password.trim() !== currentPassword) {
@@ -57,8 +57,13 @@ export async function POST(req: Request) {
     const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS
     const MINT_FUNCTION_NAME = process.env.MINT_FUNCTION_NAME || 'safeMint'
     const TOKEN_URI = process.env.TOKEN_URI
+    // Mock if not configured
     if (!PRIVATE_KEY || !CONTRACT_ADDRESS) {
-      return NextResponse.json({ error: 'server not configured' }, { status: 500 })
+      // record as minted in demo
+      const mockTx = `0x${Math.random().toString(16).slice(2).padEnd(64,'0')}`
+      minted[address.toLowerCase()] = { txHash: mockTx, blockNumber: 0, tokenId: '1', mock: true }
+      writeJson(mintedPath, minted)
+      return NextResponse.json({ txHash: mockTx, tokenId: '1', mock: true })
     }
 
     const provider = new JsonRpcProvider(RPC_URL)
@@ -92,4 +97,3 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: e?.message || 'mint failed' }, { status: 500 })
   }
 }
-

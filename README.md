@@ -7,15 +7,16 @@ NFT Mint App — Next.js + TypeScript + Tailwind（Polygon Amoy）
 - ガス代はサーバー側（APIルート）で負担し、1アドレス1回をサーバーで制御。
 - Next.js 14 App Router + TypeScript + Tailwind。
 
-クイックスタート（Next.js 版）
-1) 依存インストールと環境変数
+クイックスタート（編集不要・すぐ確認）
+1) 依存インストール
    npm install
-   cp .env.local.example .env.local   # RPC_URL/PRIVATE_KEY/CONTRACT_ADDRESS/MINT_PASSWORDなど設定
 
-2) 開発起動（5173番ポート）
+2) 起動（5173番ポート）
    npm run dev   # http://localhost:5173
 
-3) 画面の「接続状況」で server signer/contract が表示されることを確認
+3) そのまま試せます（デモモード）
+   画面上部に「デモモード」が表示され、設定なしでミントの流れを確認できます。
+   後から本番接続する場合だけ、`.env.local` を設定してください。
 
 API ルート（Next.js 内蔵）
 - `GET /api/health`: RPC/署名者/コントラクト設定の確認
@@ -30,6 +31,10 @@ API ルート（Next.js 内蔵）
 - `MINT_PASSWORD`（初期合言葉。APIで変更可能）
 - `ADMIN_SECRET`（管理API用）
 - 任意: `MINT_FUNCTION_NAME`（既定: safeMint）, `TOKEN_URI`
+
+未設定時の挙動（デモモード）
+- `PRIVATE_KEY` または `CONTRACT_ADDRESS` が未設定なら、自動でデモモードになります。
+- `/api/health` は mock=true を返し、`/api/mint` はダミーのトランザクションハッシュを返します。
 
 コントラクト（Hardhat / Amoy）
 - 場所: `contracts/`（OpenZeppelin ERC‑721 + `safeMint(address)` オーナー限定）

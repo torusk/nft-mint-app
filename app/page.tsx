@@ -70,6 +70,12 @@ export default function Page() {
       <header className="text-center space-y-2">
         <h1 className="text-2xl font-bold text-slate-900">NFT発行</h1>
         <p className="text-slate-600">Polygon（{network}）でNFTを発行。ガス代は発行側で負担します。</p>
+        {health?.mock && (
+          <div className="inline-flex items-center gap-2 text-xs font-semibold bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">
+            デモモード
+            <span className="text-[11px]">（設定なしでそのまま試せます）</span>
+          </div>
+        )}
       </header>
 
       <section className="card">
@@ -143,4 +149,3 @@ export default function Page() {
     </div>
   )
 }
-
