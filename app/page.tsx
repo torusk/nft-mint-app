@@ -1,5 +1,7 @@
 "use client"
 import { useEffect, useMemo, useState } from 'react'
+import Hero from '../components/Hero'
+import Stepper from '../components/Stepper'
 
 const isAddress = (addr: string) => /^0x[a-fA-F0-9]{40}$/.test(addr || '')
 
@@ -66,7 +68,9 @@ export default function Page() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6 space-y-6">
+    <div>
+      <Hero />
+      <div id="flow" className="max-w-3xl mx-auto p-6 space-y-6">
       <header className="text-center space-y-2">
         <h1 className="text-2xl font-bold text-slate-900">NFT発行</h1>
         <p className="text-slate-600">Polygon（{network}）でNFTを発行。ガス代は発行側で負担します。</p>
@@ -79,6 +83,9 @@ export default function Page() {
       </header>
 
       <section className="card">
+        <div className="mb-4">
+          <Stepper step={step} />
+        </div>
         <div className="font-semibold">接続状況</div>
         {health?.ok ? (
           <div className="mt-2 text-sm space-y-1">
@@ -146,6 +153,7 @@ export default function Page() {
           </div>
         </section>
       )}
+      </div>
     </div>
   )
 }

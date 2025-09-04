@@ -13,6 +13,8 @@ const config: Config = {
           blue: '#3498db',
           green: '#2ecc71',
           gray: '#f7f9fc',
+          mint: '#2ed3c7',
+          amber: '#f59e0b',
         },
       },
       boxShadow: {
