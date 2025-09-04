@@ -1,6 +1,5 @@
 "use client"
 import { useEffect, useMemo, useState } from 'react'
-import Hero from '../components/Hero'
 import Stepper from '../components/Stepper'
 
 const isAddress = (addr: string) => /^0x[a-fA-F0-9]{40}$/.test(addr || '')
@@ -68,9 +67,14 @@ export default function Page() {
   }
 
   return (
-    <div>
-      <Hero />
-      <div id="flow" className="max-w-3xl mx-auto p-6 space-y-6">
+    <div className="max-w-3xl mx-auto p-6 space-y-6">
+      {/* minimal top bar with tiny status dot (mock/real) */}
+      <div className="flex items-center justify-between">
+        <div className="text-xl font-extrabold tracking-tight text-slate-900">MintLight</div>
+        <div title={health?.mock ? 'デモモード' : '接続OK'}>
+          <span className="status-dot" style={{ backgroundColor: health?.mock ? '#f43f5e' : '#22c55e' }} />
+        </div>
+      </div>
       <header className="text-center space-y-2">
         <h1 className="text-2xl font-bold text-slate-900">NFT発行</h1>
         <p className="text-slate-600">Polygon（{network}）でNFTを発行。ガス代は発行側で負担します。</p>
@@ -86,16 +90,67 @@ export default function Page() {
         <div className="mb-4">
           <Stepper step={step} />
         </div>
-        <div className="font-semibold">接続状況</div>
-        {health?.ok ? (
-          <div className="mt-2 text-sm space-y-1">
-            <div>chainId: <code>{health.chainId}</code></div>
-            <div>server signer: <code>{health.address || '未設定'}</code></div>
-            <div>contract: <code>{health.contract || '未設定'}</code></div>
-          </div>
-        ) : (
-          <div className="mt-2 text-sm text-amber-600">{healthError || '未接続'}</div>
-        )}
+        {/* stable-sized step wrapper */}
+        <div className="step-card">
+          {step===1 && (
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg bg-brand-yellow font-extrabold flex items-center justify-center">1</div>
+                <div className="font-semibold">ウォレットアドレスの指定</div>
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <button className="btn btn-primary" onClick={connectWallet}>MetaMaskに接続</button>
+                <span className="text-slate-500">または</span>
+                <input className="input max-w-md" placeholder="0x...（宛先アドレス）" value={address} onChange={(e)=>setAddress(e.target.value.trim())} />
+              </div>
+              {!canNext1 && <div className="text-rose-600 text-sm mt-2">有効なアドレスを入力するか接続してください</div>}
+            </div>
+          )}
+          {step===2 && (
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg bg-brand-yellow font-extrabold flex items-center justify-center">2</div>
+                <div className="font-semibold">合言葉（パスワード）の入力</div>
+              </div>
+              <input className="input max-w-md" type="password" placeholder="合言葉" value={password} onChange={(e)=>setPassword(e.target.value)} />
+              {!canNext2 && <div className="text-rose-600 text-sm mt-2">合言葉を入力してください</div>}
+            </div>
+          )}
+          {step===3 && (
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg bg-brand-yellow font-extrabold flex items-center justify-center">3</div>
+                <div className="font-semibold">発行完了</div>
+              </div>
+              <div className="space-y-2 text-sm">
+                {!txHash && (
+                  <p className="text-slate-600">まだ発行していません。上の入力を済ませて「NFTを受け取る」を押すと、ここに結果が表示されます。</p>
+                )}
+                {txHash && (
+                  <>
+                    <p>NFTの発行を受け付けました。</p>
+                    {tokenId && <p>Token ID: <strong>#{tokenId}</strong></p>}
+                    <p>Tx Hash: <code>{txHash}</code></p>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="mt-6 flex items-center justify-between">
+          <button className="btn btn-secondary" onClick={()=>setStep(Math.max(1, step-1))}>
+            戻る
+          </button>
+          {step<3 ? (
+            <button className={`btn btn-primary ${((step===1 && !canNext1) || (step===2 && !canNext2))?'btn-disabled':''}`} disabled={(step===1 && !canNext1) || (step===2 && !canNext2)} onClick={()=> step===2 ? requestMint() : setStep(step+1)}>
+              {step===2 ? (loading? '発行中...' : 'NFTを受け取る') : '次へ'}
+            </button>
+          ) : (
+            <button className="btn btn-primary" onClick={()=>{ setStep(1); setAddress(''); setPassword(''); setTxHash(''); setTokenId(''); }}>
+              もう一度
+            </button>
+          )}
+        </div>
       </section>
 
       {error && (
@@ -152,7 +207,6 @@ export default function Page() {
             )}
           </div>
         </section>
-      </div>
     </div>
   )
 }
