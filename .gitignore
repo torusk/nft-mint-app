@@ -23,3 +23,15 @@ server/.env
 
 # Runtime data
 server/data/minted.json
+node_modules/
+.next/
+out/
+dist/
+build/
+.env*
+.DS_Store
+.vscode/
+.idea/
+.turbo/
+server/.env
+.data/*.json
