@@ -2,15 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body { @apply bg-brand-gray text-slate-800; }
+html, body { @apply bg-white text-slate-800; }
 
 .card { @apply bg-white border border-slate-200 rounded-xl shadow-card p-5; }
 .btn { @apply inline-flex items-center justify-center font-semibold rounded-lg px-4 py-2 transition-colors; }
-.btn-primary { @apply bg-brand-green text-white hover:bg-emerald-600; }
-.btn-secondary { @apply bg-brand-blue text-white hover:bg-sky-600; }
+.btn-primary { @apply bg-brand-yellow text-slate-900 hover:brightness-95; }
+.btn-secondary { @apply bg-brand-mint text-slate-900 hover:brightness-95; }
 .btn-danger { @apply bg-rose-500 text-white hover:bg-rose-600; }
 .btn-disabled { @apply opacity-60 cursor-not-allowed; }
-.input { @apply border border-slate-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-brand-blue; }
+.input { @apply border border-slate-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-brand-yellow; }
 
 .pennant { clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 100%, 0 75%); }
 .glass { @apply bg-white/70 backdrop-blur; }

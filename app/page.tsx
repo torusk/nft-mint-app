@@ -120,8 +120,7 @@ export default function Page() {
       </section>
 
       {/* Step 2 */}
-      {step>=2 && (
-        <section className="card">
+      <section className="card">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg bg-yellow-300 font-extrabold flex items-center justify-center">2</div>
             <div className="font-semibold">合言葉（パスワード）の入力</div>
@@ -133,26 +132,26 @@ export default function Page() {
             <button className={`btn btn-primary ${(!canNext2||loading)?'btn-disabled':''}`} disabled={!canNext2||loading} onClick={requestMint}>{loading? '発行中...' : 'NFTを受け取る'}</button>
           </div>
         </section>
-      )}
 
       {/* Step 3 */}
-      {step>=3 && (
-        <section className="card">
+      <section className="card">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg bg-yellow-300 font-extrabold flex items-center justify-center">3</div>
             <div className="font-semibold">発行完了</div>
           </div>
           <div className="space-y-2 text-sm">
-            <p>NFTの発行を受け付けました。</p>
-            {tokenId && <p>Token ID: <strong>#{tokenId}</strong></p>}
+            {!txHash && (
+              <p className="text-slate-600">まだ発行していません。上の入力を済ませて「NFTを受け取る」を押すと、ここに結果が表示されます。</p>
+            )}
             {txHash && (
-              <p>
-                Tx Hash: <code>{txHash}</code>
-              </p>
+              <>
+                <p>NFTの発行を受け付けました。</p>
+                {tokenId && <p>Token ID: <strong>#{tokenId}</strong></p>}
+                <p>Tx Hash: <code>{txHash}</code></p>
+              </>
             )}
           </div>
         </section>
-      )}
       </div>
     </div>
   )
